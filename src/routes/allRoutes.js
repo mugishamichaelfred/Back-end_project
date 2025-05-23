@@ -127,8 +127,8 @@ route.get('/users', getAllUsers.getUsers);
  * @swagger
  * /updateUser:
  *   put:
- *     summary: Update user details
- *     description: Update the details of an existing user
+ *     summary: Update user information
+ *     description: Update the details of a user
  *     requestBody:
  *       required: true
  *       content:
@@ -136,13 +136,18 @@ route.get('/users', getAllUsers.getUsers);
  *           schema:
  *             type: object
  *             properties:
- *               username:
- *                 type: string
  *               email:
  *                 type: string
- *               location:
+ *               password:
  *                 type: string
- */
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       400:
+ *         description: Invalid input or user not found
+ *       500:
+ *         description: Internal server error
+ * */
 route.put('/updateUser', updateUsers.update);
 
 /**
