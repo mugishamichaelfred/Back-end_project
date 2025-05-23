@@ -15,7 +15,7 @@ exports.createContact = async (req, res) => {
     try {
         const contact = new Contact(req.body);
         await contact.save();
-        res.status(201).json({ message: 'Contact form submitted', contact });
+        res.status(201).json({ message: 'Contact form submitted' });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
@@ -37,7 +37,7 @@ exports.updateContact = async (req, res) => {
     try {
         const contact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!contact) return res.status(404).json({ error: 'Contact not found' });
-        res.status(200).json({ message: 'Updated', contact });
+        res.status(200).json({ message: 'Updated' });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }

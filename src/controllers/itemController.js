@@ -5,41 +5,6 @@
 // File: controllers/itemController.js
 const Item = require('../models/item');
 
-/*exports.createItem = async (req, res) => {
-    try {
-        const {
-            ownerName,
-            ownerEmail,
-            ownerPhone,
-            itemName,
-            itemSerial,
-            location,
-            status
-        } = req.body;
-        
-        const itemImage = req.file ? req.file.path : null; // Assumes use of Multer for file upload
-        
-        const newItem = new Item({
-            ownerName,
-            ownerEmail,
-            ownerPhone,
-            itemName,
-            itemSerial,
-            location,
-            status,
-            itemImage
-        });
-        
-        await newItem.save();
-        res.status(201).json(newItem);
-    } catch (err) {
-        console.error('Error creating item:', err);
-        res.status(500).json({ error: 'Failed to create item.' });
-    }
-};
-*/
-
-
 // Get all items
 exports.getItems = async (req, res) => {
     try {
@@ -59,7 +24,7 @@ exports.createItem = async (req, res) => {
         }
         const item = new Item(itemData);
         await item.save();
-        res.status(201).json({ message: 'Item created', item });
+        res.status(201).json({ message: 'Item created' });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
@@ -81,7 +46,7 @@ exports.updateItem = async (req, res) => {
     try {
         const item = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!item) return res.status(404).json({ error: 'Item not found' });
-        res.status(200).json({ message: 'Item updated', item });
+        res.status(200).json({ message: 'Item updated' });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
