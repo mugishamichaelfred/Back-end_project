@@ -41,19 +41,6 @@ Current lost and found systems are fragmented and lack verification processes, l
 
 ---
 
-## 📁 Project Structure
-
-```plaintext
-backend/
-├── controllers/
-├── models/
-├── routes/
-├── docs/              # Swagger config
-├── middleware/
-├── .env
-├── server.js
-└── package.json
-
 
 📚 Methodology
 Agile Development
