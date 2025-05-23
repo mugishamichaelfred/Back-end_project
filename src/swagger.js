@@ -14,7 +14,7 @@ const options = {
         },
         servers: [
             {
-                url: 'http://localhost:1000', // Update with your server URL
+                url: 'https://lostandfoundapi.onrender.com', // Update with your server URL
             },
         ],
     },
