@@ -15,15 +15,21 @@ connectDB();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Enable CORS for all routes
+app.use(cors());
 app.use(bodyParser.json());
 
-app.use(cors({ origin: '/' }));
 
 // Routes
 app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/items', itemRoutes);
 app.use('/contacts', contactRoutes);
+
+app.get('/', (req, res) => {
+    res.json({ message: "Hello from backend" });
+});
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
