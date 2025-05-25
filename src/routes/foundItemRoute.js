@@ -4,12 +4,12 @@ const router = express.Router();
 const multer = require('multer');
 const foundItemController = require('../controllers/foundItemController');
 
-const upload = multer({ dest: './src/middlewares/uploads' });
+const upload = multer({ storage: multer.memoryStorage() });
 
-router.get('/', foundItemController.getFoundItems);
+router.get('/', foundItemController.getAllFoundItems);
 router.post('/', upload.single('itemImage'), foundItemController.createFoundItem);
 router.get('/:id', foundItemController.getFoundItemById);
-router.put('/:id', foundItemController.updateFoundItem);
+router.put('/:id', upload.single('itemImage'), foundItemController.updateFoundItem);
 router.delete('/:id', foundItemController.deleteFoundItem);
 
 module.exports = router;

@@ -1,64 +1,139 @@
-// File: controllers/foundItemController.js
 const foundItem = require('../models/foundItems');
+const bucket = require('../middlewares/firebase');  // Import Firebase bucket
 
-// Get all found items
-exports.getFoundItems = async (req, res) => {
-    try {
-        const items = await foundItem.find();
-        res.status(200).json(items);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
-
-// Create a found item
+// CREATE a new item
 exports.createFoundItem = async (req, res) => {
     try {
-        const itemData = req.body;
-        if (req.file) {
-            itemData.itemImage = req.file.path;
+        const { ownerName, ownerEmail, ownerPhone, itemName, itemSerial, description, location } = req.body;
+
+        // Check if a file has been uploaded
+        if (!req.file) {
+            return res.status(400).json({ message: 'No image file uploaded.' });
         }
-        const item = new foundItem(itemData);
-        await item.save();
-        res.status(201).json({ message: 'Found item created' });
-    } catch (err) {
-        res.status(400).json({ error: err.message });
+
+        const file = req.file;
+        const fileName = `${Date.now()}_${file.originalname}`;
+        const blob = bucket.file(fileName);
+        const blobStream = blob.createWriteStream({
+            metadata: {
+                contentType: file.mimetype,  // Set content type
+            },
+        });
+
+        // Upload the file to Firebase Storage
+        blobStream.on('finish', async () => {
+            const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+
+            // Create new item object with image URL
+            const newItem = new foundItem({
+                ownerName,
+                ownerEmail,
+                ownerPhone,
+                itemName,
+                itemImage: publicUrl,  // Store the Firebase URL
+                itemSerial,
+                description,
+                location,
+            });
+
+            // Save the item to MongoDB
+            await newItem.save();
+
+            // Return the response
+            res.status(201).json({
+                message: 'Item created successfully'
+            });
+        });
+
+        blobStream.on('error', (err) => {
+            console.error('Error uploading file to Firebase:', err);
+            res.status(500).json({ message: 'Failed to upload file to Firebase', error: err });
+        });
+
+        // Pipe the file buffer to Firebase Storage
+        blobStream.end(file.buffer);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error creating item', error });
     }
 };
 
-// Get found item by ID
+// GET all items
+exports.getAllFoundItems = async (req, res) => {
+    try {
+        const items = await foundItem.find();
+        res.json(items);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching items', error });
+    }
+};
+
+// GET an item by ID
 exports.getFoundItemById = async (req, res) => {
     try {
-        const item = await foundItem.findOne({ _id: req.params.id });
-        if (!item) return res.status(404).json({ error: 'Found item not found' });
-        res.status(200).json(item);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        const item = await foundItem.findById(req.params.id);
+        if (!item) return res.status(404).json({ message: 'Item not found' });
+        res.json(item);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching item', error });
     }
 };
 
-// Update found item
+// UPDATE an item by ID
 exports.updateFoundItem = async (req, res) => {
     try {
-        const item = await foundItem.findOneAndUpdate(
-            { _id: req.params.id },
-            req.body,
-            { new: true }
-        );
-        if (!item) return res.status(404).json({ error: 'Found item not found' });
-        res.status(200).json({ message: 'Found item updated' });
-    } catch (err) {
-        res.status(400).json({ error: err.message });
+        const { ownerName, ownerEmail, ownerPhone, itemName, itemSerial, description, location } = req.body;
+        const updatedData = { ownerName, ownerEmail, ownerPhone, itemName, itemSerial, description, location };
+
+        // If an image is uploaded, we need to handle it separately
+        if (req.file) {
+            const file = req.file;
+            const fileName = `${Date.now()}_${file.originalname}`;
+            const blob = bucket.file(fileName);
+            const blobStream = blob.createWriteStream({
+                metadata: {
+                    contentType: file.mimetype,
+                },
+            });
+
+            blobStream.on('finish', async () => {
+                const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+                updatedData.itemImage = publicUrl;
+
+                // Update the item in the database
+                const updatedItem = await foundItem.findByIdAndUpdate(req.params.id, updatedData, { new: true });
+
+                if (!updatedItem) return res.status(404).json({ message: 'Item not found' });
+
+                res.json(updatedItem);
+            });
+
+            blobStream.on('error', (err) => {
+                console.error('Error uploading file to Firebase:', err);
+                res.status(500).json({ message: 'Failed to upload file to Firebase', error: err });
+            });
+
+            blobStream.end(file.buffer);
+        } else {
+            // If no new image, update without it
+            const updatedItem = await foundItem.findByIdAndUpdate(req.params.id, updatedData, { new: true });
+            if (!updatedItem) return res.status(404).json({ message: 'Item not found' });
+            res.json(updatedItem);
+        }
+
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating item', error });
     }
 };
 
-// Delete found item
+// DELETE an item by ID
 exports.deleteFoundItem = async (req, res) => {
     try {
-        const item = await foundItem.findOneAndDelete({ _id: req.params.id });
-        if (!item) return res.status(404).json({ error: 'Found item not found' });
-        res.status(204).send({message: 'Item Deleted'});
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        const deletedItem = await foundItem.findByIdAndDelete(req.params.id);
+        if (!deletedItem) return res.status(404).json({ message: 'Item not found' });
+        res.json({ message: 'Item deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting item', error });
     }
 };
