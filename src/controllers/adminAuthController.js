@@ -2,7 +2,7 @@ const Admin = require('../models/Admin');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const SECRET_KEY = 'fb3b09a57d0da63de82fee95eb2579dcfacff45ce8dd464e1dc53d6ee6c15c0e'; // Replace with environment variable in production
+const JWT_SECRET = 'fb3b09a57d0da63de82fee95eb2579dcfacff45ce8dd464e1dc53d6ee6c15c0e'; // Replace with environment variable in production
 
 // Admin login
 exports.login = async (req, res) => {
@@ -15,7 +15,7 @@ exports.login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, admin.password);
         if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
 
-        const token = jwt.sign({ adminId: admin._id }, SECRET_KEY, { expiresIn: '2h' });
+        const token = jwt.sign({ adminId: admin._id }, JWT_SECRET, { expiresIn: '2h' });
 
         res.json({ token, message: 'Login successful' });
     } catch (error) {
@@ -30,7 +30,7 @@ exports.verifyAdmin = (req, res, next) => {
 
     const token = authHeader.split(' ')[1];
     try {
-        const decoded = jwt.verify(token, SECRET_KEY);
+        const decoded = jwt.verify(token, JWT_SECRET);
         req.adminId = decoded.adminId;
         next();
     } catch (error) {
