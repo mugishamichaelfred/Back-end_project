@@ -6,16 +6,11 @@ const ItemSchema = new mongoose.Schema({
     ownerEmail: { type: String, required: true },
     ownerPhone: { type: String, required: true },
     itemName: { type: String, required: true },
-    itemImage: { type: String },                       // Can be handled by Multer
-    itemSerial: { type: String },
+    itemImage: { type: String, required: true },                       // Can be handled by Multer
+    itemSerial: { type: String, required: true },
     descrption: {type: String},
     location: { type: String, required: true },
-    date: { type: Date, default: Date.now },
-    status: {
-        type: String,
-        enum: ['lost', 'found'],
-        required: true
-    }
+    date: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Item', ItemSchema);
+module.exports = mongoose.model('lostItem', ItemSchema);

@@ -6,7 +6,9 @@
     "description": "API documentation for Digital Lost and Found System."
   },
   "servers": [
-    { "url": "https://lostandfoundapi.onrender.com" }
+    {
+      "url": "https://lostandfoundapi.onrender.com"
+    }
   ],
   "paths": {
     "/auth/signup": {
@@ -23,8 +25,12 @@
           }
         },
         "responses": {
-          "201": { "description": "User registered successfully" },
-          "400": { "description": "Invalid input" }
+          "201": {
+            "description": "User registered successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
         }
       }
     },
@@ -103,53 +109,124 @@
         "responses": { "204": { "description": "Deleted" } }
       }
     },
-    "/items": {
+    "/lostItems": {
       "get": {
-        "summary": "Get all items",
-        "responses": { "200": { "description": "List of items" } }
+        "summary": "Get all lost items",
+        "responses": {
+          "200": { "description": "List of lost items" }
+        }
       },
       "post": {
-        "summary": "Create a new lost/found item",
+        "summary": "Create a new lost item",
         "requestBody": {
           "content": {
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/Item"
+                "$ref": "#/components/schemas/Items"
               }
             }
           }
         },
-        "responses": { "201": { "description": "Item created" } }
+        "responses": {
+          "201": { "description": "Lost item created" }
+        }
       }
     },
-    "/items/{id}": {
+    "/foundItems": {
       "get": {
-        "summary": "Get item by ID",
-        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
-        "responses": { "200": { "description": "Item data" }, "404": { "description": "Not found" } }
+        "summary": "Get all found items",
+        "responses": {
+          "200": { "description": "List of found items" }
+        }
+      },
+      "post": {
+        "summary": "Create a new found item",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Items"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Found item created" }
+        }
+      }
+    },
+    "/lostItems/{id}": {
+      "get": {
+        "summary": "Get lost item by ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Lost item data" },
+          "404": { "description": "Not found" }
+        }
       },
       "put": {
-        "summary": "Update item",
-        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "summary": "Update lost item",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/Item" }
+              "schema": { "$ref": "#/components/schemas/Items" }
             }
           }
         },
         "responses": { "200": { "description": "Item updated" } }
       },
       "delete": {
-        "summary": "Delete item",
-        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "summary": "Delete lost item",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "Deleted" } }
+      }
+    },
+    "/foundItems/{id}": {
+      "get": {
+        "summary": "Get found item by ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Found item data" },
+          "404": { "description": "Not found" }
+        }
+      },
+      "put": {
+        "summary": "Update found item",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Items" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Item updated" } }
+      },
+      "delete": {
+        "summary": "Delete found item",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
         "responses": { "204": { "description": "Deleted" } }
       }
     },
     "/users": {
       "get": {
         "summary": "Get all users",
-        "responses": { "200": { "description": "User list" } }
+        "responses": {
+          "200": { "description": "User list" }
+        }
       },
       "post": {
         "summary": "Create user",
@@ -160,14 +237,19 @@
             }
           }
         },
-        "responses": { "201": { "description": "User created" } }
+        "responses": {
+          "201": { "description": "User created" }
+        }
       }
     },
     "/users/{id}": {
       "get": {
         "summary": "Get user by ID",
         "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
-        "responses": { "200": { "description": "User data" }, "404": { "description": "Not found" } }
+        "responses": {
+          "200": { "description": "User data" },
+          "404": { "description": "Not found" }
+        }
       },
       "put": {
         "summary": "Update user",
@@ -179,12 +261,16 @@
             }
           }
         },
-        "responses": { "200": { "description": "Updated" } }
+        "responses": {
+          "200": { "description": "Updated" }
+        }
       },
       "delete": {
         "summary": "Delete user",
         "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
-        "responses": { "204": { "description": "Deleted" } }
+        "responses": {
+          "204": { "description": "Deleted" }
+        }
       }
     }
   },
@@ -212,21 +298,20 @@
         },
         "required": ["name", "email", "subject", "message"]
       },
-      "Item": {
+      "Items": {
         "type": "object",
         "properties": {
           "ownerName": { "type": "string" },
-          "ownerEmail": { "type": "string" },
+          "ownerEmail": { "type": "string", "format": "email" },
           "ownerPhone": { "type": "string" },
           "itemName": { "type": "string" },
           "itemImage": { "type": "string", "format": "binary" },
           "itemSerial": { "type": "string" },
-          "descrption": {"type": "string" },
+          "descrption": { "type": "string" },
           "location": { "type": "string" },
-          "date": { "type": "string", "format": "date-time" },
-          "status": { "type": "string", "enum": ["lost", "found"] }
+          "date": { "type": "string", "format": "date-time" }
         },
-        "required": ["ownerName", "ownerEmail", "ownerPhone", "itemName", "location", "status"]
+        "required": ["ownerName", "ownerEmail", "ownerPhone", "itemName", "itemSerial", "location"]
       }
     }
   }

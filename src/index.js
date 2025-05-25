@@ -1,7 +1,9 @@
 // File: index.js
 const express = require('express');
 const authRoutes = require('./routes/authRoute');
-const itemRoutes = require('./routes/itemRoute');
+//const itemRoutes = require('./routes/itemRoute');
+const lostItemRoutes = require('./routes/lostItemRoute');
+const foundItemRoutes = require('./routes/foundItemRoute');
 const userRoutes = require('./routes/userRoute');
 const connectDB = require('./config/db');
 const swaggerDocument = require('./swagger.json');
@@ -24,8 +26,14 @@ app.use(bodyParser.json());
 // Routes
 app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
-app.use('/items', itemRoutes);
+//app.use('/items', itemRoutes);
+app.use('/lostItems', lostItemRoutes);
+app.use('/foundItems', foundItemRoutes);
 app.use('/contacts', contactRoutes);
+
+
+// Optional: serve uploaded images statically
+app.use('/uploads', express.static('./src/middlewares/uploads'));
 
 app.get('/', (req, res) => {
     res.json({ message: "Hello from backend" });
