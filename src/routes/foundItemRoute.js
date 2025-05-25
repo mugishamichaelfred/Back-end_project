@@ -9,7 +9,7 @@ const upload = multer({ dest: './src/middlewares/uploads' });
 router.get('/', foundItemController.getFoundItems);
 router.post('/', upload.single('itemImage'), foundItemController.createFoundItem);
 router.get('/:id', foundItemController.getFoundItemById);
-router.put('/:id', foundItemController.updateFoundItem);
+router.put('/:id', upload.single('itemImage'), foundItemController.updateFoundItem);
 router.delete('/:id', foundItemController.deleteFoundItem);
 
 module.exports = router;

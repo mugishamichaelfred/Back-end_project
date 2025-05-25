@@ -14,6 +14,7 @@
     "/auth/signup": {
       "post": {
         "summary": "Register a new user",
+        "tags": ["Athorization"],
         "requestBody": {
           "required": true,
           "content": {
@@ -37,6 +38,7 @@
     "/auth/login": {
       "post": {
         "summary": "Login a user",
+        "tags": ["Athorization"],
         "requestBody": {
           "required": true,
           "content": {
@@ -58,15 +60,67 @@
         }
       }
     },
+    "/admin/login": {
+      "post": {
+        "summary": "Admin login",
+        "description": "Authenticate admin user and return a token.",
+        "tags": ["Admin"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": ["username", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "description": "JWT token for authenticated admin"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
     "/contacts": {
       "get": {
         "summary": "Get all contact submissions",
+        "tags": ["Contacts"],
         "responses": {
           "200": { "description": "A list of contacts" }
         }
       },
       "post": {
         "summary": "Submit a contact form",
+        "tags": ["Contacts"],
         "requestBody": {
           "required": true,
           "content": {
@@ -85,6 +139,7 @@
     "/contacts/{id}": {
       "get": {
         "summary": "Get a contact by ID",
+        "tags": ["Contacts"],
         "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
         "responses": {
           "200": { "description": "Contact data" },
@@ -93,6 +148,7 @@
       },
       "put": {
         "summary": "Update a contact by ID",
+        "tags": ["Contacts"],
         "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
         "requestBody": {
           "content": {
@@ -105,6 +161,7 @@
       },
       "delete": {
         "summary": "Delete a contact",
+        "tags": ["Contacts"],
         "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
         "responses": { "204": { "description": "Deleted" } }
       }
@@ -112,12 +169,14 @@
     "/lostItems": {
       "get": {
         "summary": "Get all lost items",
+        "tags": ["Lost Items"],
         "responses": {
           "200": { "description": "List of lost items" }
         }
       },
       "post": {
         "summary": "Create a new lost item",
+        "tags": ["Lost Items"],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -135,12 +194,14 @@
     "/foundItems": {
       "get": {
         "summary": "Get all found items",
+        "tags": ["Found Items"],
         "responses": {
           "200": { "description": "List of found items" }
         }
       },
       "post": {
         "summary": "Create a new found item",
+        "tags": ["Found Items"],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -158,6 +219,7 @@
     "/lostItems/{id}": {
       "get": {
         "summary": "Get lost item by ID",
+        "tags": ["Lost Items"],
         "parameters": [
           { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
@@ -168,6 +230,7 @@
       },
       "put": {
         "summary": "Update lost item",
+        "tags": ["Lost Items"],
         "parameters": [
           { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
@@ -182,6 +245,7 @@
       },
       "delete": {
         "summary": "Delete lost item",
+        "tags": ["Lost Items"],
         "parameters": [
           { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
@@ -191,6 +255,7 @@
     "/foundItems/{id}": {
       "get": {
         "summary": "Get found item by ID",
+        "tags": ["Found Items"],
         "parameters": [
           { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
@@ -201,6 +266,7 @@
       },
       "put": {
         "summary": "Update found item",
+        "tags": ["Found Items"],
         "parameters": [
           { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
@@ -215,21 +281,73 @@
       },
       "delete": {
         "summary": "Delete found item",
+        "tags": ["Found Items"],
         "parameters": [
           { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
         "responses": { "204": { "description": "Deleted" } }
       }
     },
+    "/admin/register": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Register Initial Admin",
+        "description": "One-time use endpoint to register the first admin. Should be removed or protected after use.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "password"],
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Admin account created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Username already exists or invalid input"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "summary": "Get all users",
+        "tags": ["Users"],
         "responses": {
           "200": { "description": "User list" }
         }
       },
       "post": {
         "summary": "Create user",
+        "tags": ["Users"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -245,6 +363,7 @@
     "/users/{id}": {
       "get": {
         "summary": "Get user by ID",
+        "tags": ["Users"],
         "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
         "responses": {
           "200": { "description": "User data" },
@@ -253,6 +372,7 @@
       },
       "put": {
         "summary": "Update user",
+        "tags": ["Users"],
         "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
         "requestBody": {
           "content": {
@@ -267,6 +387,7 @@
       },
       "delete": {
         "summary": "Delete user",
+        "tags": ["Users"],
         "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
         "responses": {
           "204": { "description": "Deleted" }
