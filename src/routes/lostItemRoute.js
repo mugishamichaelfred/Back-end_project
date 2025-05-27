@@ -3,7 +3,17 @@ const router = express.Router();
 const multer = require('multer');
 const lostController = require('../controllers/lostItemController');
 
-const upload = multer({ dest: './src/middlewares/uploads' });
+//for image
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './uploads/uploadLostItems');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    },
+});
+
+const upload = multer({ storage });
 
 // All routes secured by verifyAuth
 router.get('/', lostController.getAllLostItems);

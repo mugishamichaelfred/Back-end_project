@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://lostandfoundapi.onrender.com"
+      "url": "https://lostandfoundapi.onrender.com/"
     }
   ],
   "paths": {

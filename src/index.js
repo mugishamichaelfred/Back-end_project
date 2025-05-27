@@ -34,8 +34,6 @@ app.use('/foundItems', foundItemRoutes);
 app.use('/contacts', contactRoutes);
 
 
-// Optional: serve uploaded images statically
-app.use('/uploads', express.static('./src/middlewares/uploads'));
 
 app.get('/', (req, res) => {
     res.json({ message: "Hello from backend" });
