@@ -6,7 +6,7 @@ const lostController = require('../controllers/lostItemController');
 //for image
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './uploads/uploadLostItems');
+        cb(null, './src/middlewares/uploads/uploadLostItems');
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);

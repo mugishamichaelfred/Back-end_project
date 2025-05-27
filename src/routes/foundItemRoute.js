@@ -7,7 +7,7 @@ const foundItemController = require('../controllers/foundItemController');
 //for image
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './uploads/uploadFoundItems');
+        cb(null, './src/middlewares/uploads/uploadFoundItems');
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
