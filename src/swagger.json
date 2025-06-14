@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://lostandfoundapi.onrender.com"
+      "url": "http://localhost:5000"
     }
   ],
   "paths": {
@@ -405,7 +405,12 @@
           "city": { "type": "string" },
           "country": { "type": "string" },
           "gender": { "type": "string" },
-          "password": { "type": "string" }
+          "password": { "type": "string" },
+          "role": {
+            "type": "string",
+            "enum": ["user", "admin"],
+            "default": "user"
+          }
         },
         "required": ["username", "email", "password"]
       },

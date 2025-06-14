@@ -7,8 +7,8 @@ require('dotenv').config();
 
 exports.signup = async (req, res) => {
     try {
-        const { username, email, location, country, gender, password } = req.body;
-        const newUser = new User({ username, email, location, country, gender, password});
+        const { username, email, location, country, gender, password, role } = req.body;
+        const newUser = new User({ username, email, location, country, gender, password, role });
         await newUser.save();
         res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
