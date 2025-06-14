@@ -7,8 +7,8 @@ require('dotenv').config();
 
 exports.signup = async (req, res) => {
     try {
-        const { username, email, location, country, gender, password, role } = req.body;
-        const newUser = new User({ username, email, location, country, gender, password, role });
+        const { username, email, location, country, gender, password } = req.body;
+        const newUser = new User({ username, email, location, country, gender, password});
         await newUser.save();
         res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
@@ -24,8 +24,8 @@ exports.login = async (req, res) => {
         
         const valid = await bcrypt.compare(password, user.password);
         if (!valid) return res.status(401).json({ error: 'Invalid credentials' });
-        
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '4h', algorithm: 'HS256' });
+
+        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '4h', algorithm: 'HS256' });
         res.json({ token });
     } catch (error) {
         res.status(500).json({ error: error.message });

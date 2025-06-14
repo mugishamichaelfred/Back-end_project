@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:5000"
+      "url": "https://lostandfoundapi.onrender.com"
     }
   ],
   "paths": {
@@ -47,9 +47,14 @@
                 "type": "object",
                 "properties": {
                   "email": { "type": "string" },
-                  "password": { "type": "string" }
+                  "password": { "type": "string" },
+                  "role": {
+                    "type": "string",
+                    "enum": ["user", "admin"],
+                    "default": "user"
+                  }
                 },
-                "required": ["email", "password"]
+                "required": ["email", "password", "role"]
               }
             }
           }
@@ -57,56 +62,6 @@
         "responses": {
           "200": { "description": "Login successful" },
           "401": { "description": "Unauthorized" }
-        }
-      }
-    },
-    "/admin/login": {
-      "post": {
-        "summary": "Admin login",
-        "description": "Authenticate admin user and return a token.",
-        "tags": ["Admin"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "username": {
-                    "type": "string"
-                  },
-                  "password": {
-                    "type": "string"
-                  }
-                },
-                "required": ["username", "password"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Login successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "token": {
-                      "type": "string",
-                      "description": "JWT token for authenticated admin"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Invalid credentials"
-          },
-          "500": {
-            "description": "Server error"
-          }
         }
       }
     },
@@ -288,55 +243,6 @@
         "responses": { "204": { "description": "Deleted" } }
       }
     },
-    "/admin/register": {
-      "post": {
-        "tags": ["Admin"],
-        "summary": "Register Initial Admin",
-        "description": "One-time use endpoint to register the first admin. Should be removed or protected after use.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": ["username", "password"],
-                "properties": {
-                  "username": {
-                    "type": "string"
-                  },
-                  "password": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Admin account created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Username already exists or invalid input"
-          },
-          "500": {
-            "description": "Server error"
-          }
-        }
-      }
-    },
     "/users": {
       "get": {
         "summary": "Get all users",
@@ -405,12 +311,7 @@
           "city": { "type": "string" },
           "country": { "type": "string" },
           "gender": { "type": "string" },
-          "password": { "type": "string" },
-          "role": {
-            "type": "string",
-            "enum": ["user", "admin"],
-            "default": "user"
-          }
+          "password": { "type": "string" }
         },
         "required": ["username", "email", "password"]
       },
