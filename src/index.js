@@ -3,9 +3,7 @@ const express = require('express');
 const authRoutes = require('./routes/authRoute');
 const lostItemRoutes = require('./routes/lostItemRoute');
 const foundItemRoutes = require('./routes/foundItemRoute');
-const adminRoutes = require('./routes/adminRoute');
 const userRoutes = require('./routes/userRoute');
-const createAdmins = require('./routes/adminRoute');
 const connectDB = require('./config/db');
 const swaggerDocument = require('./swagger.json');
 const bodyParser = require('body-parser');
@@ -27,8 +25,6 @@ app.use(bodyParser.json());
 // Routes
 app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
-app.use('/admin', adminRoutes);
-app.use('/admin', createAdmins);
 app.use('/lostItems', lostItemRoutes);
 app.use('/foundItems', foundItemRoutes);
 app.use('/contacts', contactRoutes);
