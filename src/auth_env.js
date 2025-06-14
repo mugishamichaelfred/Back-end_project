@@ -22,7 +22,7 @@ const timerInterval = setInterval(() => {
         console.log(newSecret);
     
     // Write the new secret to .env file
-        fs.writeFileSync('./.env', `JWT_SECRET=${newSecret}\n`);
+        fs.writeFileSync('../.env', `JWT_SECRET=${newSecret}\n`);
     }
 }, 1000);
 
@@ -30,4 +30,4 @@ const timerInterval = setInterval(() => {
 const initialSecret = generateJWTSecret();
 
 // Optionally, save the initial secret to the .env file
-fs.writeFileSync('./.env', `JWT_SECRET=${initialSecret}\n`);
+fs.writeFileSync('../.env', `JWT_SECRET=${initialSecret}\n`);

@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://lostandfoundapi.onrender.com"
+      "url": "http://localhost:5000"
     }
   ],
   "paths": {
